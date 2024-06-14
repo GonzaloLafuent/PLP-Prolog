@@ -31,3 +31,9 @@ aplanar([X|L1],L) :- aplanar(L1,[X|L2]).
 */
 palindromo(L,L1) :- append(L,L2,L1), reverse(L,L2).
 
+/*
+    8)
+*/
+
+interseccion([],L2,[]).
+interseccion([X|XS],L2,L3) :- member(X,L2), append(XS,L2,L).
