@@ -21,9 +21,9 @@ pertenece(X,L) :- append(_,[X|_],L).
 
 /*
     6)
-    aplanar([],[X|[]]).
-    aplanar([X|L1],L) :- aplanar(L1,[X|L2]).
 */
+aplanar([],[]).
+aplanar([X|L1],[X,L2]) :- aplanar(L1,L2).
 
 /*
     7)
@@ -62,5 +62,13 @@ elementosTomadosEnOrden([X,Y|L1],N,[X|L2]) :- N1 is N-1 ,elementosTomadosEnOrden
 elementosTomadosEnOrden([X|L1],N,[X|L2]) :-  N1 is N-1, elementosTomadosEnOrden(L1,N1,L2).
 
 /*
-  10)
+    10)
 */
+
+/*
+    16)
+    perimetro(Tri(A,B,C),P) :- P is A
+*/
+ladoValido(A,B,C) :- A > 0, S is B+C, S > A, D is abs(B-C), A > D. 
+esTriangulo(Tri(A,B,C)) :- ladoValido(A,B,C), ladoValido(B,A,C), ladoValido(C,A,B).
+
