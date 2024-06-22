@@ -75,8 +75,14 @@ elementosTomadosEnOrden([X|L1],N,[X|L2]) :-  N1 is N-1, elementosTomadosEnOrden(
 desde(X,X).
 desde(X,Y) :- N is X+1, desde(N,Y).
 
+/*
 desde2(X,Y) :- Y is X+1.
 desde2(X,Y) :- N is X+1, desde2(N,Y).
+*/
+
+desde2(X,X).
+desde2(X,Y) :- var(Y), N is X+1, desde2(N,Y).
+desde2(X,Y) :- nonvar(Y), X < Y.
 
 /*
     11)
@@ -119,11 +125,55 @@ aBB(bin(I,R,D)) :- raiz(I,IR), raiz(D,DR), IR < R, DR > R,aBB(I), aBB(D).
 */
 
  
-coprimos(X,Y) :- desde2(1,X), desde2(1,Y), gcd(X,Y) == 1.
+/* 
+    Esto no funciona, tal que si bien me va a dar un valor de pares que tengan el mcd 1, solo
+    chequeo aquellos cuayas pares arrancar la coordenda en 1. luego el resultado no es del todo el esperado.
+    coprimos(X,Y) :- desde2(1,X), desde2(1,Y), gcd(X,Y) == 1.
+*/
+
+
+sumanS(X,Y,S) :- S1 is S-1, between(1,S1,X), Y is S1-X.
+
+generarPares(X,Y) :- desde2(2,S), sumanS(X,Y,S).
+
+coprimos(X,Y) :- generarPares(X,Y), gcd(X,Y) =:= 1.
+
+
+/*
+    15)
+*/
+
+generarFila(0,0,[]).
+generarFila(N,S,[E|RestoFila]) :- N\=0, between(0,S,E), S1 is S-E, N1 is N-1, generarFila(N1,S1,RestoFila). 
+
+generarCuadrado(0,_,_,[]).
+generarCuadrado(N,CantColumns,S,[Fila|Cuadrado]) :- N\=0, generarFila(CantColumns,S,Fila), N1 is N-1, generarCuadrado(N1,CantColumns,S,Cuadrado). 
+
+cuadradoSemilatino(N,C) :- desde2(0,S), generarCuadrado(N,N,S,C).
 
 
 
 
+esMagico([Fila|Cuadrado],N) 
+
+cuadradoMagico(N,[Fila|C]) : cuadradoSemilatino(N,[Fila|C]), sumList(Fila,N), esMagico(C,N).
 
 
+/*
+    16)
+*/
+    esTriangulo(tri(A,B,C)) :- A < B+C, B < A+C, C < B+A.
+
+/*
+    20)
+    para definir el minimo X tal que P(X) vale lo puedo definir de la siguiente manera.
+    minimoXP(X) :- desde2(0,X), P(X), not((between(0,X,Y),P(Y))), !.
+    el corte esta puesto para que una vez obtenido dicho minimo, no busco ninguno mas
+
+*/
+
+/*
+    21)
+    conjuntoDeNaturales(X) :- pertenece(E,X), natural(E).
+*/
 
