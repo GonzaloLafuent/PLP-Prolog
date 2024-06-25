@@ -279,7 +279,8 @@ cucurucho(X,Y) :- leGusta(X), leGusta(Y).
     24)
     I)
         arbol(nil).
-        arbol(bin(I,_,D)) :- arbol(I), arbol(D).
+        arbol(bin(I,_,D)) :- arbol(D).
+        arbol(bin(I,_,D)) :- arbol(I).
 
     II)
         nodosEn(nil,_).
@@ -288,11 +289,17 @@ cucurucho(X,Y) :- leGusta(X), leGusta(Y).
     III)
         generarArbol(nil,_,_).
         generarArbol(bin(I,R,D),L,Usados) :- member(R,L), not(member(R,Usados)),
-                                            append([R],Usados,U1), generarArbol(I,L,U1),
-                                            generarArbol(D,L,U21).
+                                             append([R],Usados,U1), generarArbol(I,L,U1),
+                                             generarArbol(D,L,U21).
     
         arbolSinRep(A,L) :- generarArbol(A,L,[]).
 
+    corregir: mehjor probar con armar alguna especie de generador infinito de arboles, que me permita armar
+    arboles mejor instcniados
+
 */
+arbol(nil).
+arbol(bin(I,_,D)) :- arbol(I).
 
-
+nodosEn(nil,_).
+nodosEn(bin(I,R,D),L) :- member(R,L), nodosEn(I,L), nodosEn(D,L).
