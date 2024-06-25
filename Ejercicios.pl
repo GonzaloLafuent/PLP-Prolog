@@ -250,7 +250,22 @@ cucurucho(X,Y) :- leGusta(X), leGusta(Y).
 
 /*
     24)
-    
+    I)
+    arbol(nil).
+    arbol(bin(I,_,D)) :- arbol(I), arbol(D).
+
+    II)
+    nodosEn(nil,_).
+    nodosEn(bin(I,R,D),L) :- member(R,L), arbol(I,L), arbol(D,L).
+
+    III)
+    generarArbol(nil,_,_).
+    generarArbol(bin(I,R,D),L,Usados) :- member(R,L), not(member(R,Usados)),
+                                         append([R],Usados,U1), generarArbol(I,L,U1),
+                                         generarArbol(D,L,U21).
+ 
+    arbolSinRep(A,L) :- generarArbol(A,L,[]).
+
 */
 
 
