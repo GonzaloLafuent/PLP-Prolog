@@ -215,67 +215,83 @@ cucurucho(X,Y) :- leGusta(X), leGusta(Y).
 
 /*
     21)
-    conjuntoDeNaturales(X) :- pertenece(E,X), natural(E).
+    I)
+        Si X esta conformado todo por elementos naturales luego podemos decir que no existe E, tal que 
+        E pertenece a X y E no es natural.
+        conjuntoDeNaturales(X) :- not((pertenece(E,X),not(natural(E)))
+    II)
+        Deberia funcionar con todo X que se la representacion de un conjunto. Dado que el predicado
+        pertenece dado esta definido para cuando se nos instancia un conjunto.
+    III)
+        En este caso falla dado que E no esta instanciado, luego not produce un compartamiento erroneo.
+        El not cuando los lementos que posee no estan los suficientemente instanciado tendra un compartamiento
+        que puede llevar a la falla.    
+*/
+
+/*
+    22)
+        Medio raro la verdad 
+        simular(Proceso1, Proceso2) :- accion(Proceso1,X,Sig1), accion(Proceso2,X,Sig2), simula(Sig2,Sig1).
 */
 
 /*
     23)
     I)
-    G = Grafo, D = Nodo Inicial, H = Nodo Final, L = Camino, V = Visitados
+        G = Grafo, D = Nodo Inicial, H = Nodo Final, L = Camino, V = Visitados
 
-    generarCamino(G,H,H,[H],V) :- not(member(V,H)).
-    generarCamino(G,D,H,[X|L],V) :- esArista(G,D,X), not(member(X,V)), append([X],V,V1), generarCamino(G,X,H,L,V1).
+        generarCamino(G,H,H,[H],V) :- not(member(V,H)).
+        generarCamino(G,D,H,[X|L],V) :- esArista(G,D,X), not(member(X,V)), append([X],V,V1), generarCamino(G,X,H,L,V1).
 
-    caminoSimple(G,D,H,[D|L]) :- esNodo(G,H), esNodo(G,D) , generarCamino(G,D,H,L,[D])
+        caminoSimple(G,D,H,[D|L]) :- esNodo(G,H), esNodo(G,D) , generarCamino(G,D,H,L,[D])
 
     
 
     II)
 
-    listarNodos(G,L,V) :- not((esNodo(G,X), not(member(X,visitados)))).
-    listarNodos(G,[V|L],listados) :- esNodo(G,V), not(member(V,listados)),
-                                     append(V,L1), listarNodos(G,L,L1).
+        listarNodos(G,L,V) :- not((esNodo(G,X), not(member(X,visitados)))).
+        listarNodos(G,[V|L],listados) :- esNodo(G,V), not(member(V,listados)),
+                                        append(V,L1), listarNodos(G,L,L1).
 
-    nodos(G,[V|L]) :- esNodo(G,V), listarNodos(G,L,[V]).
+        nodos(G,[V|L]) :- esNodo(G,V), listarNodos(G,L,[V]).
 
-    generarParDeNodos(G,D,H) :- esNodo(G,D), esNodo(G,H). 
+        generarParDeNodos(G,D,H) :- esNodo(G,D), esNodo(G,H). 
 
-    caminoHamiltoniano(G,L) :- generarParDeNodos(G,D,H), nodos(G,L), caminoSimple(G,D,H,C),
-                               not((member(V,L),not(member(V,C)))).
+        caminoHamiltoniano(G,L) :- generarParDeNodos(G,D,H), nodos(G,L), caminoSimple(G,D,H,C),
+                                not((member(V,L),not(member(V,C)))).
 
     III)
-    noEsConexo(G) :- generarParDeNodos(G,D,H), not(caminoSimple(G,D,H,C)).
+        noEsConexo(G) :- generarParDeNodos(G,D,H), not(caminoSimple(G,D,H,C)).
 
-    esConexo(G) :- not(noEsConexo(G)).
+        esConexo(G) :- not(noEsConexo(G)).
 
     IV)
-    listarAritas(G,_,Listados) :- not((esArista(G,X,Y), not(member([X,Y],Listados)))).
-    listarAristas(G,[[X,Y]|L],Listados) :- esAristas(G,X,Y), not(member([X,Y],listados)),
-                                           append([[X,Y]],Listados,L1), listarNodos(G,L,L1).
+        listarAritas(G,_,Listados) :- not((esArista(G,X,Y), not(member([X,Y],Listados)))).
+        listarAristas(G,[[X,Y]|L],Listados) :- esAristas(G,X,Y), not(member([X,Y],listados)),
+                                            append([[X,Y]],Listados,L1), listarNodos(G,L,L1).
 
-    aristas(G,[[X,Y]|L]) :- esArista(G,X,Y), listarArista(G,L,[[X,Y]]).
+        aristas(G,[[X,Y]|L]) :- esArista(G,X,Y), listarArista(G,L,[[X,Y]]).
 
-    esEstrella(G) :- esConexo(G), aristas(G,L), esNodo(G,V), not(esArista(G,V,Y), not(member([X,Y],L))).
+        esEstrella(G) :- esConexo(G), aristas(G,L), esNodo(G,V), not(esArista(G,V,Y), not(member([X,Y],L))).
 
 */
 
 /*
     24)
     I)
-    arbol(nil).
-    arbol(bin(I,_,D)) :- arbol(I), arbol(D).
+        arbol(nil).
+        arbol(bin(I,_,D)) :- arbol(I), arbol(D).
 
     II)
-    nodosEn(nil,_).
-    nodosEn(bin(I,R,D),L) :- member(R,L), arbol(I,L), arbol(D,L).
+        nodosEn(nil,_).
+        nodosEn(bin(I,R,D),L) :- member(R,L), arbol(I,L), arbol(D,L).
 
     III)
-    generarArbol(nil,_,_).
-    generarArbol(bin(I,R,D),L,Usados) :- member(R,L), not(member(R,Usados)),
-                                         append([R],Usados,U1), generarArbol(I,L,U1),
-                                         generarArbol(D,L,U21).
- 
-    arbolSinRep(A,L) :- generarArbol(A,L,[]).
+        generarArbol(nil,_,_).
+        generarArbol(bin(I,R,D),L,Usados) :- member(R,L), not(member(R,Usados)),
+                                            append([R],Usados,U1), generarArbol(I,L,U1),
+                                            generarArbol(D,L,U21).
+    
+        arbolSinRep(A,L) :- generarArbol(A,L,[]).
 
 */
 
