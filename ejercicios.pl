@@ -30,8 +30,8 @@ pertenece(X,L) :- append(_,[X|_],L).
 */
 palindromo(L,L1) :- append(L,L2,L1), reverse(L,L2).
 
-
-iesimo(I,L,X) :- append(L1,[X|_],L), N is I-1 , length(L1,N).
+iesimo(0,[X|_],X).
+iesimo(I,[_|XS],X) :- I\=0, iesimo(I,XS,X), append(L1,[X|_],Y|XS), N is I+1 , length(L1,N).
 
 /*
     8)
@@ -40,7 +40,13 @@ interseccion([],_,[]).
 interseccion([X|XS],L2,[X|L3]) :- interseccion(XS,L2,L3), member(X,L2).
 interseccion([_|XS],L2,L3) :- interseccion(XS,L2,L3).
 
-partir(N,L,L1,L2) :- append(L,L2,L1), length(L,N).
+partir(N,L,L1,L2) :- append(ElemsDeL,_,L), length(ElemsDeL,N), append(ElemsDeL,L2,L1).
+/*
+    Sere reversible en N, en L1 y en L2. no funcionara su reversibilidad para L, tal que por como definimos el predicado
+    queremos que lo que usa de L sea de longitud igual a 2. luego en cada paso cuando modifica la instanciacion no cambia L,
+    sino que intenta agregar mas elementos al resto de L. fallando asi tal que se vuelve un buble infinito
+*/
+
 
 borrar([],_,[]).
 borrar([X|XS],X,LN) :- borrar(XS,X,LN).
@@ -52,6 +58,9 @@ sacarDuplicados([X|L1],[X|L2]) :- borrar(L1,X,L), sacarDuplicados(L,L2).
 /*
 permutacion([X|XS],L) :- permutacion(XS,L1), inter
 */
+
+reparto(L,0,[L|_]).
+reparto(L1,N,[L|RestoDeListas]) :- N1 is N-1, reparto(L2,N1,RestoDeListas), append(L,L2,L1).
 
 /*
     9)
@@ -100,7 +109,8 @@ raiz(bin(_,R,_),RAIZ) :- RAIZ is R.
 cantidadDeNodos(nil,N) :- N is 0.
 cantidadDeNodos(bin(I,_,D),N) :- cantidadDeNodos(I,N1), cantidadDeNodos(D,N2), N is N1 + N2 +1. 
 
-altura().
+altura(nil,0).
+altura(bin(I,_,D),Altura) :- altura(I,AlturaI), altura(D,AlturaD), Altura is max(AlturaI,AlturaD)+ 1;
 
 /*
     13)
@@ -109,10 +119,10 @@ altura().
 inorder(nil,[]).
 inorder(bin(I,R,D),L) :- inorder(I,LI), inorder(D,LD), append(LI,[R|LD],L).
 
-/*
-arbolConInorder([],nil).
+
+arbolConInorder([R],bin(nil,R,nil)).
+arbolConInorder([L,R],bin())
 arbolConInorder([I,_,D|L],).
-*/
 
 aBB(nil).
 aBB(bin(nil,_,nil)).
@@ -126,6 +136,7 @@ aBB(bin(I,R,D)) :- raiz(I,IR), raiz(D,DR), IR < R, DR > R,aBB(I), aBB(D).
 /* 
     Esto no funciona, tal que si bien me va a dar un valor de pares que tengan el mcd 1, solo
     chequeo aquellos cuayas pares arrancar la coordenda en 1. luego el resultado no es del todo el esperado.
+
     coprimos(X,Y) :- desde2(1,X), desde2(1,Y), gcd(X,Y) == 1.
 */
 
