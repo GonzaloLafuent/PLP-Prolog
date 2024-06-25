@@ -154,7 +154,6 @@ sumaColumna([],_,0).
 sumaColumna([Fila|Cuadrado],I,S) :- nth0(I,Fila,E), sumaColumna(Cuadrado,I,S1), S is S1+E.
 
 esMagico(C,SumaFila,N) :- not((between(0,N,I),sumaColumna(C,I,S), S\= SumaFila)).   
-                                               
 
 cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Suma), N1 is N-1, esMagico(C,Suma,N1).
 
@@ -166,6 +165,33 @@ cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Sum
 
 /*
     17)
+*/
+
+frutal(frutilla).
+frutal(banana).
+frutal(manzana).
+cremoso(banana).
+cremoso(americana).
+cremoso(frutilla).
+cremoso(dulceDeLeche).
+
+leGusta(X) :- frutal(X), cremoso(X).
+cucurucho(X,Y) :- leGusta(X), leGusta(Y).
+
+/*
+    18)
+    a) Estamos pidiendo que el valor instcniado en Y sea uno tal que cumple P pero no cumple Q.
+
+    b)
+
+    c) para determinar esto se puede escribir de la siguiente manera:
+
+        unicoYqueCumpleP(Y) :- P(Y), not((P(X)), X \=Y)
+
+       La idea es que como el predicado P es reversible de acuerdo a la consigna, si no lo instacion me devuelve
+       un posible valor X que cumple P. Luego si quiero ve que Y es el unicion elemento que hace valor P entonces
+       lo podemos pensar como que Y debe cumplir el prediado P y a su vez no debe existir otro elemento X
+       donde X sea distinto que Y, tal que haga valer P. esto esta expresado con el ultimo not. 
 */
 
 /*
@@ -180,4 +206,51 @@ cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Sum
     21)
     conjuntoDeNaturales(X) :- pertenece(E,X), natural(E).
 */
+
+/*
+    23)
+    I)
+    G = Grafo, D = Nodo Inicial, H = Nodo Final, L = Camino, V = Visitados
+
+    generarCamino(G,H,H,[H],V) :- not(member(V,H)).
+    generarCamino(G,D,H,[X|L],V) :- esArista(G,D,X), not(member(X,V)), append([X],V,V1), generarCamino(G,X,H,L,V1).
+
+    caminoSimple(G,D,H,[D|L]) :- esNodo(G,H), esNodo(G,D) , generarCamino(G,D,H,L,[D])
+
+    
+
+    II)
+
+    listarNodos(G,L,V) :- not((esNodo(G,X), not(member(X,visitados)))).
+    listarNodos(G,[V|L],listados) :- esNodo(G,V), not(member(V,listados)),
+                                     append(V,L1), listarNodos(G,L,L1).
+
+    nodos(G,[V|L]) :- esNodo(G,V), listarNodos(G,L,[V]).
+
+    generarParDeNodos(G,D,H) :- esNodo(G,D), esNodo(G,H). 
+
+    caminoHamiltoniano(G,L) :- generarParDeNodos(G,D,H), nodos(G,L), caminoSimple(G,D,H,C),
+                               not((member(V,L),not(member(V,C)))).
+
+    III)
+    noEsConexo(G) :- generarParDeNodos(G,D,H), not(caminoSimple(G,D,H,C)).
+
+    esConexo(G) :- not(noEsConexo(G)).
+
+    IV)
+    listarAritas(G,_,Listados) :- not((esArista(G,X,Y), not(member([X,Y],Listados)))).
+    listarAristas(G,[[X,Y]|L],Listados) :- esAristas(G,X,Y), not(member([X,Y],listados)),
+                                           append([[X,Y]],Listados,L1), listarNodos(G,L,L1).
+
+    aristas(G,[[X,Y]|L]) :- esArista(G,X,Y), listarArista(G,L,[[X,Y]]).
+
+    esEstrella(G) :- esConexo(G), aristas(G,L), esNodo(G,V), not(esArista(G,V,Y), not(member([X,Y],L))).
+
+*/
+
+/*
+    24)
+    
+*/
+
 
