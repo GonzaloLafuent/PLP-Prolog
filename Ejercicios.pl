@@ -49,8 +49,6 @@ borrar([Y|XS],X,[Y|LN]) :- X\=Y, borrar(XS,X,LN).
 sacarDuplicados([],[]).
 sacarDuplicados([X|L1],[X|L2]) :- borrar(L1,X,L), sacarDuplicados(L,L2).
 
-reparto(,0,LL).
-reparto(L,N,LL) :- 
 /*
 permutacion([X|XS],L) :- permutacion(XS,L1), inter
 */
@@ -152,17 +150,23 @@ generarCuadrado(N,CantColumns,S,[Fila|Cuadrado]) :- N\=0, generarFila(CantColumn
 cuadradoSemilatino(N,C) :- desde2(0,S), generarCuadrado(N,N,S,C).
 
 
+sumaColumna([],_,0).
+sumaColumna([Fila|Cuadrado],I,S) :- nth0(I,Fila,E), sumaColumna(Cuadrado,I,S1), S is S1+E.
 
+esMagico(C,SumaFila,N) :- not((between(0,N,I),sumaColumna(C,I,S), S\= SumaFila)).   
+                                               
 
-esMagico([Fila|Cuadrado],N) 
-
-cuadradoMagico(N,[Fila|C]) : cuadradoSemilatino(N,[Fila|C]), sumList(Fila,N), esMagico(C,N).
+cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Suma), N1 is N-1, esMagico(C,Suma,N1).
 
 
 /*
     16)
 */
     esTriangulo(tri(A,B,C)) :- A < B+C, B < A+C, C < B+A.
+
+/*
+    17)
+*/
 
 /*
     20)
