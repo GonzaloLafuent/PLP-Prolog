@@ -299,7 +299,9 @@ cucurucho(X,Y) :- leGusta(X), leGusta(Y).
 
 */
 arbol(nil).
-arbol(bin(I,_,D)) :- arbol(I).
+arbol(bin(I,_,D)) :- arbol(I), arbol(D).
+arbol(bin(nil,_,nil)).
 
 nodosEn(nil,_).
-nodosEn(bin(I,R,D),L) :- member(R,L), nodosEn(I,L), nodosEn(D,L).
+nodosEn(bin(I,R,D),L) :- length(L,N), N1 is N-1, between(0,N1,J), nth0(J,L,R,_),
+                         nodosEn(I,L), nodosEn(D,L).
