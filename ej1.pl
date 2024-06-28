@@ -18,9 +18,31 @@ ancestro(X, Y) :- ancestro(Z, Y), padre(X, Z).
     luego padre(X,luis), X = juan, por lo tanto abuelo(X,manuel), X = juan 
 */
 
-/* 2) */
+/* 
+    2) 
+*/
 hijo(X,Y) :- padre(Y,X).
 hermano(X,Y) :- hijo(X,Z), hijo(Y,Z), X\=Y.
+
+descendiente(X,Y) :- hijo(X,Y).
+descendiente(X,Y) :- hijo(X,Z), descendiente(Z,Y).
+/*
+    3)
+        descendiente(A,Juan)-
+            hijo(A,Juan)-
+                padre(Juan,A)-
+                    A =  carlos.
+                    A = luis.
+                /corta
+            hijo(A,Z), descendiente(Z,Juan)-
+                padre(Z,A),descendiente(Z,Juan)-
+                    Z = juan, A = Carlos, descendiente(Z,Juan)-
+                        hijo(juan,juan)-
+                            padre(juan,juan), /falla
+                        hijo(juan,Z),descendiente(Z,Y)
+                            
+                    
+*/
 
 /* 
     4)
