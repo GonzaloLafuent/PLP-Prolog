@@ -176,6 +176,17 @@ cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Sum
 
 /*
     17)
+        cucurucho(X,Y) -
+            -legusta(X), legusta(Y)
+                -fruta(X), cremoso(X), legusta(Y)
+                    - X = frutilla, legusta(Y)
+                        -frutal(Y), cremoso(Y)
+                            y = frutilla.
+                            y = banana.
+                    - X = banana, legusta(Y)
+                        -frutal(Y), legusta(Y)
+                            y = frutilla
+                            y = banana        
 */
 
 frutal(frutilla).
@@ -186,8 +197,8 @@ cremoso(americana).
 cremoso(frutilla).
 cremoso(dulceDeLeche).
 
-leGusta(X) :- frutal(X), cremoso(X).
-cucurucho(X,Y) :- leGusta(X), leGusta(Y).
+leGusta(X) :- frutal(X),cremoso(X).
+cucurucho(X,Y) :- leGusta(X),leGusta(Y).
 
 /*
     18)
