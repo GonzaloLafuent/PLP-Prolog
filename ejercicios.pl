@@ -288,40 +288,21 @@ cucurucho(X,Y) :- leGusta(X),leGusta(Y).
 
 /*
     24)
-    I)
-        arbol(nil).
-        arbol(bin(I,_,D)) :- arbol(D).
-        arbol(bin(I,_,D)) :- arbol(I).
-
-    II)
-        nodosEn(nil,_).
-        nodosEn(bin(I,R,D),L) :- member(R,L), arbol(I,L), arbol(D,L).
-
-    III)
-        generarArbol(nil,_,_).
-        generarArbol(bin(I,R,D),L,Usados) :- member(R,L), not(member(R,Usados)),
-                                             append([R],Usados,U1), generarArbol(I,L,U1),
-                                             generarArbol(D,L,U21).
-    
-        arbolSinRep(A,L) :- generarArbol(A,L,[]).
-
-    corregir: mehjor probar con armar alguna especie de generador infinito de arboles, que me permita armar
-    arboles mejor instcniados
-
 */
 
-nodos(nil,0).
-nodos(bin(I,_,D),N) :- N\=0, between(0,N,NI), nodos(I,NI), between(0,NI,ND), nodos(D,ND), N is 1 + NI + ND. 
+generarPares(X,Y,S) :- between(0,S,X), Y is S-X. 
 
-arbol(nil).
-arbol(bin(I,_,D)) :- arbol(I), arbol(D).
-arbol(bin(nil,_,nil)).
+arbolDeNNodos(nil,0).
+arbolDeNNodos(bin(I,_,D),N) :- N\=0, N2 is N-1, generarPares(ND,NI,N2), arbolDeNNodos(I,NI), arbolDeNNodos(D,ND). 
 
-/*
-    olvidarse de esto, mejor pensar en la altura de cada subarbol. si geneero subarboles de ciera altura en cada
-    paso voya  tener un arbol distinto para instancias I e D
-*/
+arbol(T) :- desde2(0,N), arbolDeNNodos(T,N).
 
-nodosEn(nil,_).
-nodosEn(bin(I,R,D),L) :- length(L,N), N1 is N-1, between(0,N1,J), nth0(J,L,R,_),
-                         nodosEn(I,L), nodosEn(D,L).
+estanElemsL(nil,_).
+estanElemsL(bin(I,R,D),L) :- member(R,L), estanElemsL(I,L), estanElemsL(D,L).
+
+nodosEn(T,L) :- arbol(T), estanElemsL(T,L). 
+
+sinRep(nil,_,_).
+sinRep(bin(I,E,D),L,V) :- member(E,L) , not(member(E,V)), sinRep(I,L,[E|V]), sinRep(D,L,[E|V]). 
+
+arbolSinRep(T,L) :- length(L,N), between(0,N,N1), arbolDeNNodos(T,N1), sinRep(T,L,[]).
