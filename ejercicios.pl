@@ -309,6 +309,10 @@ cucurucho(X,Y) :- leGusta(X),leGusta(Y).
     arboles mejor instcniados
 
 */
+
+nodos(nil,0).
+nodos(bin(I,_,D),N) :- N\=0, between(0,N,NI), nodos(I,NI), between(0,NI,ND), nodos(D,ND), N is 1 + NI + ND. 
+
 arbol(nil).
 arbol(bin(I,_,D)) :- arbol(I), arbol(D).
 arbol(bin(nil,_,nil)).
