@@ -171,6 +171,7 @@ cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Sum
 
 /*
     16)
+    Esta hecho en la practica, podemos chequear con eso.
 */
     esTriangulo(tri(A,B,C)) :- A < B+C, B < A+C, C < B+A.
 
@@ -214,6 +215,11 @@ cucurucho(X,Y) :- leGusta(X),leGusta(Y).
        un posible valor X que cumple P. Luego si quiero ve que Y es el unicion elemento que hace valor P entonces
        lo podemos pensar como que Y debe cumplir el prediado P y a su vez no debe existir otro elemento X
        donde X sea distinto que Y, tal que haga valer P. esto esta expresado con el ultimo not. 
+*/
+
+/*
+    19)
+    Para chequear esta hecho en la clase practica
 */
 
 /*
