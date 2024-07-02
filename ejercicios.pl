@@ -312,3 +312,12 @@ sinRep(nil,_,_).
 sinRep(bin(I,E,D),L,V) :- member(E,L) , not(member(E,V)), sinRep(I,L,[E|V]), sinRep(D,L,[E|V]). 
 
 arbolSinRep(T,L) :- length(L,N), between(0,N,N1), arbolDeNNodos(T,N1), sinRep(T,L,[]).
+
+palabra(_,0,[]).
+palabra(L,N,[X|XS]) :- N\=0, member(X,L), N1 is N-1, palabra(L,N1,XS).
+
+frase(_,[]).
+frase(L,F) :- desde2(2,S), sumanS(X,Y,S), X\=0, Y\=0 , fraseDeLargo(X,Y,L,F).
+
+fraseDeLargo(0,_,_,[]).
+fraseDeLargo(LF,LP,L,[P|F]) :- LF\=0, palabra(L,LP,P), N1 is LF-1, fraseDeLargo(N1,LP,L,F).
