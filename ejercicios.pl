@@ -29,7 +29,7 @@ pertenece(X,L) :- append(_,[X|_],L).
 /*
     7)
 */
-palindromo(L,L1) :- append(L,L2,L1), reverse(L,L2).
+palindromo(L,L1) :- reverse(L,L2), append(L,L2,L1).
 
 iesimo(0,[X|_],X).
 iesimo(I,[_|XS],X) :- I\=0, iesimo(I,XS,X), append(L1,[X|_],Y|XS), N is I+1 , length(L1,N).
@@ -38,8 +38,8 @@ iesimo(I,[_|XS],X) :- I\=0, iesimo(I,XS,X), append(L1,[X|_],Y|XS), N is I+1 , le
     8)
 */
 interseccion([],_,[]).
-interseccion([X|XS],L2,[X|L3]) :- interseccion(XS,L2,L3), member(X,L2).
-interseccion([_|XS],L2,L3) :- interseccion(XS,L2,L3).
+interseccion([X|XS],L2,[X|R]) :- member(X,L2), interseccion(XS,L2,R).
+interseccion([X|XS],L2,R) :- not(member(X,L2)), interseccion(XS,L2,R).
 
 partir(N,L,L1,L2) :- append(ElemsDeL,_,L), length(ElemsDeL,N), append(ElemsDeL,L2,L1).
 /*
@@ -67,9 +67,16 @@ reparto(L1,N,[L|RestoDeListas]) :- N1 is N-1, reparto(L2,N1,RestoDeListas), appe
     9)
 */
 
+/*
 elementosTomadosEnOrden(_,0,[]).
 elementosTomadosEnOrden([X,Y|L1],N,[X|L2]) :- N1 is N-1 ,elementosTomadosEnOrden([Y,L1],N1,L2).
 elementosTomadosEnOrden([X|L1],N,[X|L2]) :-  N1 is N-1, elementosTomadosEnOrden(L1,N1,L2).
+*/
+
+elementosTomadosEnOrden(_, 0, []).
+elementosTomadosEnOrden([], _, []).
+elementosTomadosEnOrden([X|L], N, [X|E]) :- N > 0, N2 is N-1, elementosTomadosEnOrden(L, N2, E).
+
 
 /*
   10)
@@ -121,6 +128,10 @@ inorder(nil,[]).
 inorder(bin(I,R,D),L) :- inorder(I,LI), inorder(D,LD), append(LI,[R|LD],L).
 
 
+/* 
+    Para este un forma poco eficiente es hacer una especi de genrate and test que reproduza todos lo arboles
+    posibles con esa lista de nodos, luego a partir de eso ver alguno cuyo inorder coincida con el de la lista dada
+*/
 arbolConInorder([R],bin(nil,R,nil)).
 arbolConInorder([L,R],bin())
 arbolConInorder([I,_,D|L],).
@@ -174,7 +185,15 @@ cuadradoMagico(N,C) :- cuadradoSemilatino(N,C), nth0(0,C,Fila), sumlist(Fila,Sum
     16)
     Esta hecho en la practica, podemos chequear con eso.
 */
-    esTriangulo(tri(A,B,C)) :- A < B+C, B < A+C, C < B+A.
+    esTriangulo(tri(A, B, C)) :- A < B+C, B < A+C, C < A+B, A > B-C.
+
+    sumaP(A,B,C,P) :- between(1,P,A), R is P - A, between(1,R,B), C is R - B.
+
+    generarTriangulo(tri(A,B,C),P) :- sumaP(A,B,C,P) , esTriangulo(tri(A,B,C)).
+
+    perimetro(T,P) :- nonvar(P), generarTriangulo(T,P).
+    perimetro(T,P) :- not(ground(T)),var(P), desde2(3,P), generarTriangulo(T,P).
+    perimetro(tri(A,B,C),P) :- ground(tri(A,B,C)), P is A+B+C.
 
 /*
     17)
