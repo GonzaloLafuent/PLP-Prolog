@@ -7,9 +7,10 @@ juntar([X|XS],Y,[X|ZS]) :- juntar(XS,Y,ZS).
 /* 
     5)
 */
-ultimo(_,X) :- append(_,[X],_).
+ultimo(L,X) :- append(_,[X],L).
 
-invertir(L1,L2) :- append(L1,[],[L2|_]).
+invertir([],[]).
+invertir([X|XS],L) :- reverse(XS,L0), append(L0,[X],L).
 
 prefijo(P,L) :- append(P,_,L).
 
@@ -321,3 +322,7 @@ frase(L,F) :- desde2(2,S), sumanS(X,Y,S), X\=0, Y\=0 , fraseDeLargo(X,Y,L,F).
 
 fraseDeLargo(0,_,_,[]).
 fraseDeLargo(LF,LP,L,[P|F]) :- LF\=0, palabra(L,LP,P), N1 is LF-1, fraseDeLargo(N1,LP,L,F).
+
+montaña(L,L1,C,L2) :- prefijo(P,L), sort(P,P1), P = P1, append(P,L2,L),
+                      last(P,C), nth0(0,L2,E), E < C, reverse(L2,L3), sort(L3,L4), L3 = L4,
+                      delete(P,C,L1). 
