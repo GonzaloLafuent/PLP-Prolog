@@ -345,3 +345,14 @@ fraseDeLargo(LF,LP,L,[P|F]) :- LF\=0, palabra(L,LP,P), N1 is LF-1, fraseDeLargo(
 montaña(L,L1,C,L2) :- prefijo(P,L), sort(P,P1), P = P1, append(P,L2,L),
                       last(P,C), nth0(0,L2,E), E < C, reverse(L2,L3), sort(L3,L4), L3 = L4,
                       delete(P,C,L1). 
+
+alfa(a).
+alfa(b).
+alfa(c).
+alfa(d).
+alfa(e).
+
+cadenasLongN(0,[]).
+cadenasLongN(N,[X|XS]) :- N\=0 , N1 is N-1, alfa(X),cadenasLongN(N1,XS).
+
+cadenas(L) :- desde(1,N), cadenasLongN(N,L).
