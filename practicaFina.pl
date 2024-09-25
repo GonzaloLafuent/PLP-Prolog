@@ -30,3 +30,6 @@ alfa(b).
 alfa(c).
 alfa(d).
 alfa(e).
+
+buscar(X,cons( _ ,XS)) :- buscar(X,XS).
+buscar(X,cons(X, _)).

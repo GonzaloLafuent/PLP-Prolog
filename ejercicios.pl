@@ -356,3 +356,4 @@ cadenasLongN(0,[]).
 cadenasLongN(N,[X|XS]) :- N\=0 , N1 is N-1, alfa(X),cadenasLongN(N1,XS).
 
 cadenas(L) :- desde(1,N), cadenasLongN(N,L).
+
